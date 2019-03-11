@@ -10,7 +10,7 @@ short_run = 0
 playlist = '6A'
 
 def main():    
-    pot_mc,pot_data = getPOT(playlist)
+    pot_mc,pot_data,pot_mc_total = getPOT(playlist)
 
     t_mc_0,t_data = getChains('NukeCCQETwoTrack', playlist)
 
