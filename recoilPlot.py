@@ -280,11 +280,11 @@ def draw_plots(hs_0,hs_2,h_data,target):
     leg.AddEntry( hs_2[3], 'COH' ,'f') ;
     leg.SetFillColor( ROOT.kWhite ) ;
     leg.Draw();
-    c7.Print('muon_pt_'+target+'.pdf')
-    c7.Print('muon_pt_'+target+'.png')
+    c7.Print('plots/muon_pt_'+target+'.pdf')
+    c7.Print('plots/muon_pt_'+target+'.png')
     c7.SetLogy()
-    c7.Print('muon_pt_'+target+'_log.pdf')
-    c7.Print('muon_pt_'+target+'_log.png')
+    c7.Print('plots/muon_pt_'+target+'_log.pdf')
+    c7.Print('plots/muon_pt_'+target+'_log.png')
 
 def draw_plots2(hs_4,hs_5,h_data,target):
     c8 = ROOT.TCanvas('c8')
@@ -316,11 +316,11 @@ def draw_plots2(hs_4,hs_5,h_data,target):
     leg.SetFillColor( ROOT.kWhite ) ;
     leg.Draw();
     
-    c8.Print('recoilE_'+target+'.pdf')
-    c8.Print('recoilE_'+target+'.png')
+    c8.Print('plots/recoilE_'+target+'.pdf')
+    c8.Print('plots/recoilE_'+target+'.png')
     c8.SetLogy()
-    c8.Print('recoilE_'+target+'_log.pdf')
-    c8.Print('recoilE_'+target+'_log.png')
+    c8.Print('plots/recoilE_'+target+'_log.pdf')
+    c8.Print('plots/recoilE_'+target+'_log.png')
 
 def draw_plots2D(hs_4,hs_5,h_data,target):
     c8 = ROOT.TCanvas('c8', "First canvas", 1600, 600)
