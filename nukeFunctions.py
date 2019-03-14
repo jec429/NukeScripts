@@ -148,9 +148,9 @@ def pass_cuts(e):
 def getChains(cname,playlist):
    t_mc   = ROOT.TChain(cname)
    t_data = ROOT.TChain(cname)
-   t_mc.Add('~/data/googoo/pruned_'+playlist+'_minerva_00126*.root')
+   t_mc.Add('/minerva/data/users/jchaves/googoo/pruned_'+playlist+'_minerva_00126*.root')
    #t_data.Add('~/data/googoo/pruned_NukeCCQETwoTrack_minerva_run00022*-00022*.root')
-   t_data.Add('~/data/googoo/pruned_'+playlist+'_minerva_00022*-00022*.root')
+   t_data.Add('/minerva/data/users/jchaves/googoo/pruned_'+playlist+'_minerva_00022*-00022*.root')
    return t_mc, t_data
    
 def getPOT(playlist):
