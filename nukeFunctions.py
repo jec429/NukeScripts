@@ -93,26 +93,38 @@ def target3_scint_cut(z):
    else:
       return False
 
-def target4_cut(z):
+def targetW_cut(z):
    if z > 5450 and z < 5460:
       return True
    else:
       return False
 
-def target4_scint_cut(z):
+def targetW_scint_cut(z):
    if z > 5470 and z < 5510:
       return True
    else:
       return False
 
-def target5_cut(z):
+def target4_cut(z):
    if z > 5670 and z < 5690:
       return True
    else:
       return False
 
-def target5_scint_cut(z):
+def target4_scint_cut(z):
    if z > 5690 and z < 5730:
+      return True
+   else:
+      return False
+
+def target5_cut(z):
+   if z > 5800 and z < 5820:
+      return True
+   else:
+      return False
+
+def target5_scint_cut(z):
+   if z > 5800 and z < 5860:
       return True
    else:
       return False

@@ -178,6 +178,7 @@ def makeHistos(nhists, bins, ranges):
    histos.append(makeHistosTarget(nhists,bins, ranges,'4'))
    histos.append(makeHistosTarget(nhists,bins, ranges,'5'))
    histos.append(makeHistosTarget(nhists,bins, ranges,'6'))
+   histos.append(makeHistosTarget(nhists,bins, ranges,'7'))
    return histos
 
 def makeHistos2D(nhists, bins1, ranges1, bins2, ranges2):
@@ -188,6 +189,7 @@ def makeHistos2D(nhists, bins1, ranges1, bins2, ranges2):
    histos.append(makeHistosTarget2D(nhists, bins1, ranges1, bins2, ranges2, '4'))
    histos.append(makeHistosTarget2D(nhists, bins1, ranges1, bins2, ranges2, '5'))
    histos.append(makeHistosTarget2D(nhists, bins1, ranges1, bins2, ranges2, '6'))
+   histos.append(makeHistosTarget2D(nhists, bins1, ranges1, bins2, ranges2, '7'))
    return histos
 
 def makeHistosTarget(nhists, bins, ranges, target):
@@ -346,11 +348,11 @@ oneNeutron = 0
 moreOneNeutron = 1
 
 short_run = 0
-playlist = '6B'
+playlist = '6A'
 
 def main():    
 
-   pot_mc,pot_data = getPOT(playlist)
+   pot_mc,pot_data,pot_mc_total = getPOT(playlist)
 
    t_mc_0,t_data = getChains('NukeCCQETwoTrack', playlist)
 
@@ -404,7 +406,7 @@ def main():
          #print time.time() - timeNow 
          timeNow = time.time()
       i += 1
-      if i > 100000 and short_run: break
+      if i > 10000 and short_run: break
 
       if not pass_cuts(e): continue
       if not pass_neutron_cuts(e): continue
@@ -500,6 +502,7 @@ def main():
       elif target3_cut(e.vtx[2]): target = 2
       elif target4_cut(e.vtx[2]): target = 3
       elif target5_cut(e.vtx[2]): target = 4
+      elif targetW_cut(e.vtx[2]): target = 6
       else: continue
       
       # Fill target histos
@@ -625,6 +628,7 @@ def main():
       elif target3_cut(e.vtx[2]): target = 2
       elif target4_cut(e.vtx[2]): target = 3
       elif target5_cut(e.vtx[2]): target = 4
+      elif targetW_cut(e.vtx[2]): target = 6
       else: continue
       
       # Fill target histos
@@ -666,7 +670,7 @@ def main():
    print 'Pass n=',pass_entries
 
    # Draw plots
-   for i,targetN in enumerate(['t1','t2','t3','t4','t5','all']):
+   for i,targetN in enumerate(['t1','t2','t3','t4','t5','all','tW']):
       
       drawPlots(hs_0[i],'Vertex Z [mm]',targetN+'/zpos')      
       drawPlots(hs_1[i],'Muon momentum [GeV/c]',targetN+'/mom_mu')
