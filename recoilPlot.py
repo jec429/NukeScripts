@@ -1,14 +1,17 @@
 import ROOT
 import math
 from nukePlots import *
+import sys
 
 oneNeutron = 0
 moreOneNeutron = 1
 
-short_run = 0
+short_run = 1 if len(sys.argv)>1 and sys.argv[1] == 'shortRun' else 0
 playlist = '6A'
 
 def main():    
+    if short_run: print "Short Run"
+    else: print "Full Run"
     pot_mc,pot_data,pot_mc_total = getPOT(playlist)
 
     t_mc_0,t_data = getChains('NukeCCQETwoTrack', playlist)
@@ -113,6 +116,7 @@ def main():
         elif target3_cut(e.vtx[2]): target = 2
         elif target4_cut(e.vtx[2]): target = 3
         elif target5_cut(e.vtx[2]): target = 4
+        elif targetW_cut(e.vtx[2]): target = 6
         else: continue
         
         genie_n_muons = 0
@@ -261,6 +265,7 @@ def main():
       elif target3_cut(e.vtx[2]): target = 2
       elif target4_cut(e.vtx[2]): target = 3
       elif target5_cut(e.vtx[2]): target = 4
+      elif targetW_cut(e.vtx[2]): target = 6
       else: continue
       
       # Fill target histos
@@ -276,118 +281,27 @@ def main():
     scale = pot_data/pot_mc
     print 'Pass n=',pass_entries
 
-    '''
-    draw_plots(hs_0[0][1],hs_2[0][1],hs_0[0][6],'t1')
-    draw_plots(hs_1[0][1],hs_3[0][1],hs_1[0][6],'t1_bkg')
-    draw_plots2(hs_4[0][1],hs_5[0][1],hs_4[0][6],'t1')
     
-    draw_plots(hs_0[1][1],hs_2[1][1],hs_0[1][6],'t2')
-    draw_plots(hs_1[1][1],hs_3[1][1],hs_1[1][6],'t2_bkg')
-    draw_plots2(hs_4[1][1],hs_5[1][1],hs_4[1][6],'t2')
+    for i,targetN in enumerate(['t1','t2','t3','t4','t5','all','tW']):
+        draw_plots(hs_0[i][1],hs_2[i][1],hs_0[i][6],targetN)
+        draw_plots(hs_1[i][1],hs_3[i][1],hs_1[i][6],targetN+'_bkg')
+        draw_plots2(hs_4[i][1],hs_5[i][1],hs_4[i][6],targetN)
+        
+        draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_6[i][1],hs_8[i][1],targetN)
+        draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_7[i][1],hs_9[i][1],targetN+'_bkg') 
+        draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_10[i][1],hs_12[i][1],targetN)
+        draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_11[i][1],hs_13[i][1],targetN+'_bkg') 
+        draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_14[i][1],hs_16[i][1],targetN)
+        draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_15[i][1],hs_17[i][1],targetN+'_bkg')     
+        draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_18[0][1],hs_20[0][1],targetN)
+        draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_19[0][1],hs_21[0][1],targetN+'_bkg')
+        draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_22[0][1],hs_24[0][1],targetN)
+        draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_23[0][1],hs_25[0][1],targetN+'_bkg')         
+        draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_26[0][1],hs_28[0][1],targetN)
+        draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_27[0][1],hs_29[0][1],targetN+'_bkg') 
     
-    draw_plots(hs_0[2][1],hs_2[2][1],hs_0[2][6],'t3')
-    draw_plots(hs_1[2][1],hs_3[2][1],hs_1[2][6],'t3_bkg')
-    draw_plots2(hs_4[2][1],hs_5[2][1],hs_4[2][6],'t3')
-    
-    draw_plots(hs_0[3][1],hs_2[3][1],hs_0[3][6],'t4')
-    draw_plots(hs_1[3][1],hs_3[3][1],hs_1[3][6],'t4_bkg')
-    draw_plots2(hs_4[3][1],hs_5[3][1],hs_4[3][6],'t4')
-    
-    draw_plots(hs_0[4][1],hs_2[4][1],hs_0[4][6],'t5')
-    draw_plots(hs_1[4][1],hs_3[4][1],hs_1[4][6],'t5_bkg')
-    draw_plots2(hs_4[4][1],hs_5[4][1],hs_4[4][6],'t5')
-    
-    draw_plots(hs_0[5][1],hs_2[5][1],hs_0[5][6],'all')
-    draw_plots(hs_1[5][1],hs_3[5][1],hs_1[5][6],'all_bkg')
-    draw_plots2(hs_4[5][1],hs_5[5][1],hs_4[5][6],'all')
-    
-    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_6[0][1],hs_8[0][1],'t1')
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_7[0][1],hs_9[0][1],'t1_bkg') 
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_6[1][1],hs_8[1][1],'t2')    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_7[1][1],hs_9[1][1],'t2_bkg')    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_6[2][1],hs_8[2][1],'t3')    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_7[2][1],hs_9[2][1],'t3_bkg')    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_6[3][1],hs_8[3][1],'t4')    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_7[3][1],hs_9[3][1],'t4_bkg')    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_6[4][1],hs_8[4][1],'t5')    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_7[4][1],hs_9[4][1],'t5_bkg')    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_6[5][1],hs_8[5][1],'all')    
-    draw_plots_MCONLY('pi_p_Es_','#pi^{+} Energy[MeV]',hs_7[5][1],hs_9[5][1],'all_bkg')    
+        draw_plots2D(hs_2d_0[i][1],hs_2d_1[i][1],hs_2d_0[i][6],targetN)
 
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_10[0][1],hs_12[0][1],'t1')
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_11[0][1],hs_13[0][1],'t1_bkg') 
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_10[1][1],hs_12[1][1],'t2')    
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_11[1][1],hs_13[1][1],'t2_bkg')    
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_10[2][1],hs_12[2][1],'t3')    
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_11[2][1],hs_13[2][1],'t3_bkg')    
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_10[3][1],hs_12[3][1],'t4')    
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_11[3][1],hs_13[3][1],'t4_bkg')    
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_10[4][1],hs_12[4][1],'t5')    
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_11[4][1],hs_13[4][1],'t5_bkg')    
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_10[5][1],hs_12[5][1],'all')    
-    draw_plots_MCONLY('pi_m_Es_','#pi^{-} Energy[MeV]',hs_11[5][1],hs_13[5][1],'all_bkg')    
-
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_14[0][1],hs_16[0][1],'t1')
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_15[0][1],hs_17[0][1],'t1_bkg') 
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_14[1][1],hs_16[1][1],'t2')    
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_15[1][1],hs_17[1][1],'t2_bkg')    
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_14[2][1],hs_16[2][1],'t3')    
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_15[2][1],hs_17[2][1],'t3_bkg')    
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_14[3][1],hs_16[3][1],'t4')    
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_15[3][1],hs_17[3][1],'t4_bkg')    
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_14[4][1],hs_16[4][1],'t5')    
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_15[4][1],hs_17[4][1],'t5_bkg')    
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_14[5][1],hs_16[5][1],'all')    
-    draw_plots_MCONLY('pi_0_Es_','#pi^{0} Energy[MeV]',hs_15[5][1],hs_17[5][1],'all_bkg')    
-    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_18[0][1],hs_20[0][1],'t1')
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_19[0][1],hs_21[0][1],'t1_bkg')
-    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_18[1][1],hs_20[1][1],'t2')    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_19[1][1],hs_21[1][1],'t2_bkg')    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_18[2][1],hs_20[2][1],'t3')    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_19[2][1],hs_21[2][1],'t3_bkg')    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_18[3][1],hs_20[3][1],'t4')    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_19[3][1],hs_21[3][1],'t4_bkg')    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_18[4][1],hs_20[4][1],'t5')    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_19[4][1],hs_21[4][1],'t5_bkg')    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_18[5][1],hs_20[5][1],'all')    
-    draw_plots_MCONLY('n_pi_p_','No. #pi^{+}',hs_19[5][1],hs_21[5][1],'all_bkg')    
-
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_22[0][1],hs_24[0][1],'t1')
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_23[0][1],hs_25[0][1],'t1_bkg') 
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_22[1][1],hs_24[1][1],'t2')    
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_23[1][1],hs_25[1][1],'t2_bkg')    
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_22[2][1],hs_24[2][1],'t3')    
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_23[2][1],hs_25[2][1],'t3_bkg')    
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_22[3][1],hs_24[3][1],'t4')    
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_23[3][1],hs_25[3][1],'t4_bkg')    
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_22[4][1],hs_24[4][1],'t5')    
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_23[4][1],hs_25[4][1],'t5_bkg')    
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_22[5][1],hs_24[5][1],'all')    
-    draw_plots_MCONLY('n_pi_m_','No. #pi^{-}',hs_23[5][1],hs_25[5][1],'all_bkg')    
-
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_26[0][1],hs_28[0][1],'t1')
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_27[0][1],hs_29[0][1],'t1_bkg') 
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_26[1][1],hs_28[1][1],'t2')    
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_27[1][1],hs_29[1][1],'t2_bkg')    
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_26[2][1],hs_28[2][1],'t3')    
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_27[2][1],hs_29[2][1],'t3_bkg')    
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_26[3][1],hs_28[3][1],'t4')    
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_27[3][1],hs_29[3][1],'t4_bkg')    
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_26[4][1],hs_28[4][1],'t5')    
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_27[4][1],hs_29[4][1],'t5_bkg')    
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_26[5][1],hs_28[5][1],'all')    
-    draw_plots_MCONLY('n_pi_0_','No. #pi^{0}',hs_27[5][1],hs_29[5][1],'all_bkg')    
-    '''
-    
-    draw_plots2D(hs_2d_0[0][1],hs_2d_1[0][1],hs_2d_0[0][6],'t1')
-    draw_plots2D(hs_2d_0[1][1],hs_2d_1[1][1],hs_2d_0[1][6],'t2')
-    draw_plots2D(hs_2d_0[2][1],hs_2d_1[2][1],hs_2d_0[2][6],'t3')
-    draw_plots2D(hs_2d_0[3][1],hs_2d_1[3][1],hs_2d_0[3][6],'t4')
-    draw_plots2D(hs_2d_0[4][1],hs_2d_1[4][1],hs_2d_0[4][6],'t5')
-    draw_plots2D(hs_2d_0[5][1],hs_2d_1[5][1],hs_2d_0[5][6],'all')
     
     
 def draw_plots(hs_0,hs_2,h_data,target):

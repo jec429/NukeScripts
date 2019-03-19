@@ -170,6 +170,25 @@ def getPOT(playlist):
 
    return pot_mc_u,pot_data,pot_mc_t
 
+def getChainFile(cname,fname):
+   t_chain   = ROOT.TChain(cname)
+   t_chain.Add(fname)
+   return t_chain
+   
+def getPOTFile(fname):
+   pot_mc_t = 0.0
+   pot_mc_u = 0.0
+
+   t_mc = getChainFile('Meta', fname)
+   
+   for e in t_mc:
+      pot_mc_u += e.POT_Used
+   for e in t_mc:
+      pot_mc_t += e.POT_Total
+   print pot_mc_t,pot_mc_u
+
+   return pot_mc_u,pot_mc_t
+
 def getTrueQ0(entry):
    mc_incomingPartVec = entry.mc_incomingPartVec
    mc_primFSLepton = entry.mc_primFSLepton
