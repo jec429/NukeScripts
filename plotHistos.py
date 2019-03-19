@@ -10,7 +10,7 @@ ROOT.TH1.AddDirectory(False)
 plotter = PlotUtils.MnvPlotter()
 targetUtils = PlotUtils.TargetUtils()
 
-mcHistsFile = ROOT.TFile('test.root')
+mcHistsFile = ROOT.TFile('systematics_6A_minerva.root')
 
 SIGNAL_DEFINITIONS = [
   'inclusive'
@@ -54,7 +54,7 @@ for PLAYLISTS,HISTDIR,isME in zip([PLAYLISTS_LE,PLAYLISTS_ME],[HISTDIR_LE,HISTDI
     #scaleFactor = 1.0
     #mcPOT_ratio = 1.0
 
-    for target in ['','t1_','t2_','t3_','t4_','t5_']: 
+    for target in ['','t1_','t2_','t3_','t4_','t5_','tW_']: 
         for sigDef in SIGNAL_DEFINITIONS:
             key = '{0}_{1}'.format(sigDef,playlist)
             exec("dataRateHist2D_{0} = mcHistsFile.Get('h_Mupt_VS_Mupz_{1}{2}_reco')".format(key,target,sigDef))
