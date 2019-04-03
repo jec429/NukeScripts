@@ -22,6 +22,10 @@ short_run = 1
 playlist = '6A'
 
 def main():
+    start_dir = ROOT.TVector3()
+    end_dir = ROOT.TVector3()
+    direction = ROOT.TVector3()
+
     xs = [ array( 'd' ) for x in range(7) ]
     ns = [ array( 'd' ) for x in range(7) ]
     ds = [ array( 'd' ) for x in range(7) ]
@@ -79,17 +83,27 @@ def main():
         elif target5_cut(e.vtx[2]): target = 4
         elif targetW_cut(e.vtx[2]): target = 6
         else: continue
-    
+
         for i,c in enumerate(xs[target]):
-            val = random.uniform(0,3.15) # ANGLE here
-            signal = True
-            for can in e.neutron3d_ancestor:
-                if can != 2112:
-                    signal = False                
-            if pass_test_cut(val,c):
-                if signal:
+           for mom,dx,dy,dz,ex,ey,ez,sx,sy,sz in zip(e.neutron3d_ancestor,e.neutron3d_direction_x,e.neutron3d_direction_y,e.neutron3d_direction_z,e.neutron3d_end_x,e.neutron3d_end_y,e.neutron3d_end_z,e.neutron3d_start_x,e.neutron3d_start_y,e.neutron3d_start_z):
+              if mom == 2112:
+                 signal = True
+              else:
+                 signal=False
+
+              start_dir.SetXYZ(sx-e.vtx[0],sy-e.vtx[1],sz-e.vtx[2])
+              end_dir.SetXYZ(ex-e.vtx[0],ey-e.vtx[1],ez-e.vtx[2])
+              if start_dir.Mag() > end_dir.Mag():
+                 direction.SetXYZ(-dx,-dy,-dz)
+                 val = direction.Angle(end_dir)
+              else:
+                 direction.SetXYZ(dx,dy,dz)
+                 val = direction.Angle(start_dir)
+
+              if pass_test_cut(val,c):
+                 if signal:
                     ns[target][i] += 1
-                else:
+                 else:
                     ds[target][i] += 1
 
     for i in range(7):
