@@ -10,7 +10,6 @@ def pass_neutron_cuts(e):
    return True
 
 def pass_test_cut(val, cut):
-    val = random.uniform(0,3.15)
     if val > cut:
         return True
     else:
@@ -82,7 +81,7 @@ def main():
         else: continue
     
         for i,c in enumerate(xs[target]):
-            val = 0.0 # ANGLE here
+            val = random.uniform(0,3.15) # ANGLE here
             signal = True
             for can in e.neutron3d_ancestor:
                 if can != 2112:
